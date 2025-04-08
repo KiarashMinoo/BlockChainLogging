@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using BlockChainLogging.Logging;
 using Microsoft.AspNetCore.Mvc;
 using BlockChainLogging.Models;
 
@@ -11,15 +12,6 @@ public class HomeController : Controller
     public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
-    }
-
-    public IActionResult Index()
-    {
-        _logger.LogInformation("Calling Index");
-
-        var temperatures = GenerateTemperatures();
-
-        return View(temperatures);
     }
 
     private IEnumerable<Temperature> GenerateTemperatures()
@@ -37,6 +29,21 @@ public class HomeController : Controller
 
         return temperatures;
     }
+
+    public IActionResult Index()
+    {
+        _logger.LogInformation("Calling Index");
+
+        var temperatures = GenerateTemperatures();
+
+        return View(temperatures);
+    }
+
+    public IActionResult Validity([FromServices]IBlockchainValidator blockchainValidator)
+    {
+        return View(blockchainValidator.IsChainValid());
+    }
+
 
     public IActionResult Privacy()
     {

@@ -14,6 +14,7 @@ builder.Host
     });
 
 builder.Services.AddSingleton<BlockchainSink>();
+builder.Services.AddSingleton<IBlockchainValidator>(serviceProvider => serviceProvider.GetRequiredService<BlockchainSink>());
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
