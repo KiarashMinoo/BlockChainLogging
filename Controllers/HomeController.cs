@@ -15,7 +15,27 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        _logger.LogInformation("Calling Index");
+
+        var temperatures = GenerateTemperatures();
+
+        return View(temperatures);
+    }
+
+    private IEnumerable<Temperature> GenerateTemperatures()
+    {
+        _logger.LogInformation("Generating temperatures");
+
+        string[] cities = ["London", "Paris", "New York", "Los Angeles", "Berlin"];
+
+        var temperatures = cities
+            .Select(city => new Temperature()
+            {
+                City = city,
+                Degree = Random.Shared.Next(-45, 46),
+            });
+
+        return temperatures;
     }
 
     public IActionResult Privacy()

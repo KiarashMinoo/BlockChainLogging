@@ -1,4 +1,19 @@
+using BlockChainLogging.Logging;
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host
+    .UseSerilog((_, serviceProvider, loggerConfiguration) =>
+    {
+        var blockchainSink = serviceProvider.GetRequiredService<BlockchainSink>();
+
+        loggerConfiguration
+            .WriteTo.Console()
+            .WriteTo.Sink(blockchainSink);
+    });
+
+builder.Services.AddSingleton<BlockchainSink>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
